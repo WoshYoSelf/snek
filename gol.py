@@ -15,24 +15,19 @@ def end_message(msg, disp, dis_wid, dis_len, font):
 def update_score(score, disp, dis_wid, dis_len, font):
     mesg = font.render(str(score), True, black)
     disp.blit(mesg, [0, 0])
-    pygame.display.update()
     
 def create_snake(display, x, y, snake_size):
     pygame.draw.rect(display, blue, [x, y, snake_size, snake_size])
-    pygame.display.update()
 
 def create_esnake(display, x, y, esnake_size):
     pygame.draw.rect(display, green, [x, y, 10, esnake_size])
-    pygame.display.update()
 
 def grow_snake(display, snake_body, snake_size):
     for x in snake_body:
         pygame.draw.rect(display, blue, [x[0], x[1], snake_size, snake_size])
-    pygame.display.update()
 
 def create_food(display, x, y, snake_size):
     pygame.draw.rect(display, red, [x, y, snake_size, snake_size])
-    pygame.display.update()
 
 def move(display, dis_len, dis_wid, snake_size, event):
     
@@ -120,6 +115,7 @@ def game_loop(display, display_width, display_length, clock, snake_size, snake_s
 
         grow_snake(display, snake_body, snake_size)
         update_score(score, display, display_width, display_length, font)
+        pygame.display.update()
         
         if x == foodx and y == foody:
             foodx = round(random.randrange(0, display_width - snake_size) / 10.0) * 10.0
@@ -132,6 +128,11 @@ def game_loop(display, display_width, display_length, clock, snake_size, snake_s
             ey = round(random.randrange(0, display_length - snake_size) / 10.0) * 10.0
             esnake_size = round(random.randrange(20, 70) / 10.0) * 10.0
             esnake_c += 1
+
+        print(y)
+
+        if x == ex and y in range(int(ey), int(ey) + int(esnake_size)):
+            game_close = True
                 
         clock.tick(snake_speed) #snake speed
 
