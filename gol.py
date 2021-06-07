@@ -21,7 +21,7 @@ def create_snake(display, x, y, snake_size):
 
 def create_esnake(display, coords, counter, esnake_size):
     for index in range(counter + 1):
-        pygame.draw.rect(display, green, [coords[index][0], coords[index][1], 10, esnake_size])
+        pygame.draw.rect(display, green, [coords[index][0], coords[index][1], 10, esnake_size[index]])
         #print(coords[index][0], coords[index][1])
         #print(counter)
         
@@ -63,6 +63,7 @@ def game_loop(display, display_width, display_length, clock, snake_size, snake_s
     esnake_c = 0
     esnake_coords = []
     esnake_singCoords = []
+    esnake_sizeL = []
             
     ex = round(random.randrange(0, display_width - snake_size) / 10.0) * 10.0
     ey = round(random.randrange(0, display_length - snake_size) / 10.0) * 10.0
@@ -70,6 +71,7 @@ def game_loop(display, display_width, display_length, clock, snake_size, snake_s
 
     esnake_singCoords.append(ex)
     esnake_singCoords.append(ey)
+    esnake_sizeL.append(esnake_size)
     esnake_coords.append(esnake_singCoords)
     
     x_change = 0
@@ -108,7 +110,7 @@ def game_loop(display, display_width, display_length, clock, snake_size, snake_s
         display.fill(white)
         create_food(display, foodx, foody, snake_size)
         create_snake(display, x, y, snake_size)
-        create_esnake(display, esnake_coords, esnake_c, esnake_size)
+        create_esnake(display, esnake_coords, esnake_c, esnake_sizeL)
 
         snake_head = []
         snake_head.append(x)
@@ -140,11 +142,9 @@ def game_loop(display, display_width, display_length, clock, snake_size, snake_s
             esnake_singCoords.append(ey)
             esnake_coords.append(esnake_singCoords)
             esnake_size = round(random.randrange(20, 70) / 10.0) * 10.0
+            esnake_sizeL.append(esnake_size)
             esnake_c += 1
             
-        print(esnake_coords)
-        print(esnake_c)
-
         for i in range(len(esnake_coords)):
             if x == esnake_coords[i][0] and y in range(int(esnake_coords[i][1]), int(esnake_coords[i][1]) + int(esnake_size)):
                 game_close = True
