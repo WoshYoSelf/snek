@@ -22,8 +22,6 @@ def create_snake(display, x, y, snake_size):
 def create_esnake(display, coords, counter, esnake_size):
     for index in range(counter + 1):
         pygame.draw.rect(display, green, [coords[index][0], coords[index][1], 10, esnake_size[index]])
-        #print(coords[index][0], coords[index][1])
-        #print(counter)
         
 def grow_snake(display, snake_body, snake_size):
     for x in snake_body:
@@ -49,6 +47,38 @@ def move(display, dis_len, dis_wid, snake_size, event):
     
     return dx, dy
 
+def esnake_move(coords, counter, movingBool, movedBoolX, movedBoolY):
+    
+    if movingBool == False and movedBoolX == False:
+        coords[0][1] += 5
+        counter += 1
+        if counter == 5:
+            movingBool = True
+            movedBoolX = True
+
+    if movingBool == False and movedBoolX == True:
+        coords[0][1] -= 5
+        counter += 1
+        if counter == 5:
+            movingBool = True
+            movedBoolX = False
+                
+    elif movingBool == True and movedBoolY == False:
+        coords[0][0] += 5
+        counter -= 1
+        if counter == 0:
+            movingBool = False
+            movedBoolY = True
+
+    elif movingBool == True and movedBoolY == True:
+        coords[0][0] -= 5
+        counter -= 1
+        if counter == 0:
+            movingBool = False
+            movedBoolX = False
+        
+    return counter, movingBool, movedBoolX, movedBoolY
+
 def game_loop(display, display_width, display_length, clock, snake_size, snake_speed, font):
     
     x = display_width/2
@@ -61,6 +91,10 @@ def game_loop(display, display_width, display_length, clock, snake_size, snake_s
     foody = round(random.randrange(0, display_length - snake_size) / 10.0) * 10.0
 
     esnake_c = 0
+    esnake_moveC = 0
+    esnake_moveB = False
+    esnake_movedBX = False
+    esnake_movedBY = False
     esnake_coords = []
     esnake_singCoords = []
     esnake_sizeL = []
@@ -86,7 +120,7 @@ def game_loop(display, display_width, display_length, clock, snake_size, snake_s
         
         while game_close == True:
             display.fill(white)
-            end_message("You loser. Press Q to quit or C to play again.", display, display_width, display_length, font)
+            end_message("You loser. Press Q to quit or C to play again.", display, display_width/2, display_length, font)
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q:
@@ -106,6 +140,22 @@ def game_loop(display, display_width, display_length, clock, snake_size, snake_s
 
         x += x_change    
         y += y_change
+
+        esnake_moveC, esnake_moveB, esnake_movedB, esnake_movedBY = esnake_move(esnake_coords, esnake_moveC, esnake_moveB, esnake_movedBX, esnake_movedBY)
+
+        '''
+        if esnake_move == False:
+            esnake_coords[0][1] += 5
+            esnake_moveC += 1
+            if esnake_moveC == 5:
+                esnake_move = True
+                
+        elif esnake_move == True:
+            esnake_coords[0][0] += 5
+            esnake_moveC -= 1
+            if esnake_moveC == 0:
+                esnake_move = False
+        '''
 
         display.fill(white)
         create_food(display, foodx, foody, snake_size)
